@@ -1,16 +1,22 @@
-const { app, BrowserWindow } = require('electron');
-const path = require('node:path');
+const { app, BrowserWindow, Tray } = require("electron");
+const path = require("node:path");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
+if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+let mainWindow;
+let tray;
+
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
+  mainWindow = new BrowserWindow({
+    width: 300,
     height: 600,
+    frame: false,
+    resizable: false,
+    show: false,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
@@ -20,7 +26,37 @@ const createWindow = () => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+
+  // Get the correct tray icon, then create a new tray
+  const iconName =
+    process.platform === "win32" ? "windows-icon.png" : "iconTemplate.png";
+  const iconPath = path.join(
+    app.getAppPath(),
+    `./src/react/assets/${iconName}`
+  );
+  tray = new Tray(iconPath);
+
+  tray.on("click", (event, bounds) => {
+    // Click event bounds
+    const { x, y } = bounds;
+
+    // Window size
+    const { height, width } = mainWindow.getBounds();
+
+    if (mainWindow.isVisible()) {
+      mainWindow.hide();
+    } else {
+      const yPosition = process.platform === "darwin" ? y : y - height;
+      mainWindow.setBounds({
+        x: x - width / 2,
+        y: yPosition,
+        height: height,
+        width: width,
+      })
+      mainWindow.show();
+    }
+  });
 };
 
 // This method will be called when Electron has finished
@@ -31,7 +67,7 @@ app.whenReady().then(() => {
 
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  app.on('activate', () => {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
     }
@@ -41,8 +77,8 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });

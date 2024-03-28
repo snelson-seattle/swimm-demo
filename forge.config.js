@@ -35,6 +35,7 @@ module.exports = {
         port: 3001,
         loggerPort: 9001,
         mainConfig: './webpack.main.config.js',
+        devContentSecurityPolicy: "connect-src 'self' * 'unsafe-eval'",
         renderer: {
           config: './webpack.renderer.config.js',
           entryPoints: [
