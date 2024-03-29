@@ -1,5 +1,5 @@
 ---
-title: refactored main.js to use new TimerTray class
+title: TimerTray class
 ---
 # Introduction
 
