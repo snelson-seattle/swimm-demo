@@ -9,11 +9,9 @@ We will cover:
 
 1. Why we decided to encapsulate the tray icon behavior in a class.
 
+2. How the TimerTray class is structured.
 
-1. How the TimerTray class is structured.
-
-
-1. How the TimerTray class is used in the main application file.
+3. How the TimerTray class is used in the main application file.
 
 # Encapsulating Tray Icon Behavior
 
@@ -29,7 +27,10 @@ const { Tray } = require("electron");
 class TimerTray extends Tray {
   constructor(iconPath, mainWindow) {
     super(iconPath);
+
     this.mainWindow = mainWindow;
+
+    this.setToolTip("Tasky Timer");
     this.on("click", this.onClick);
   }
 ```
@@ -54,7 +55,10 @@ const { Tray } = require("electron");
 class TimerTray extends Tray {
   constructor(iconPath, mainWindow) {
     super(iconPath);
+
     this.mainWindow = mainWindow;
+
+    this.setToolTip("Tasky Timer");
     this.on("click", this.onClick);
   }
 ```
@@ -63,7 +67,7 @@ class TimerTray extends Tray {
 
 </SwmSnippet>
 
-<SwmSnippet path="/src/app/timer_tray.js" line="9">
+<SwmSnippet path="/src/app/timer_tray.js" line="12">
 
 ---
 
@@ -83,7 +87,7 @@ When the tray icon is clicked, we want to show or hide the main window. To do th
 
 </SwmSnippet>
 
-<SwmSnippet path="/src/app/timer_tray.js" line="16">
+<SwmSnippet path="/src/app/timer_tray.js" line="19">
 
 ---
 
@@ -111,7 +115,7 @@ Then, we check if the main window is currently visible. If it is, we hide it. If
 
 </SwmSnippet>
 
-<SwmSnippet path="/src/app/timer_tray.js" line="31">
+<SwmSnippet path="/src/app/timer_tray.js" line="34">
 
 ---
 
@@ -143,7 +147,7 @@ const TimerTray = require("./app/timer_tray");
 
 </SwmSnippet>
 
-<SwmSnippet path="/src/main.js" line="36">
+<SwmSnippet path="/src/main.js" line="39">
 
 ---
 

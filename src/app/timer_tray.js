@@ -3,7 +3,10 @@ const { Tray } = require("electron");
 class TimerTray extends Tray {
   constructor(iconPath, mainWindow) {
     super(iconPath);
+
     this.mainWindow = mainWindow;
+
+    this.setToolTip("Tasky Timer");
     this.on("click", this.onClick);
   }
 
