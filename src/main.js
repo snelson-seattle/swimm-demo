@@ -36,10 +36,11 @@ const createWindow = () => {
     app.getAppPath(),
     `./src/react/assets/${iconName}`
   );
+
   tray = new TimerTray(iconPath, mainWindow);
 
-  tray.on("click", (event, bounds) => {
-   
+  mainWindow.on("blur", () => {
+    mainWindow.hide();
   });
 };
 
