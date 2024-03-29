@@ -1,4 +1,5 @@
-const { app, BrowserWindow, Tray } = require("electron");
+const { app, BrowserWindow } = require("electron");
+const TimerTray = require("./app/timer_tray");
 const path = require("node:path");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -35,27 +36,10 @@ const createWindow = () => {
     app.getAppPath(),
     `./src/react/assets/${iconName}`
   );
-  tray = new Tray(iconPath);
+  tray = new TimerTray(iconPath, mainWindow);
 
   tray.on("click", (event, bounds) => {
-    // Click event bounds
-    const { x, y } = bounds;
-
-    // Window size
-    const { height, width } = mainWindow.getBounds();
-
-    if (mainWindow.isVisible()) {
-      mainWindow.hide();
-    } else {
-      const yPosition = process.platform === "darwin" ? y : y - height;
-      mainWindow.setBounds({
-        x: x - width / 2,
-        y: yPosition,
-        height: height,
-        width: width,
-      })
-      mainWindow.show();
-    }
+   
   });
 };
 
