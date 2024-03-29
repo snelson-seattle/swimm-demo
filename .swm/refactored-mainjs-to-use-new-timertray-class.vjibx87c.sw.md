@@ -22,7 +22,7 @@ We will cover:
 In our Electron application, we have a tray icon that users can interact with. Previously, the behavior of this tray icon was scattered throughout our main application file. This made the code harder to understand and maintain. To solve this, we decided to encapsulate all the tray icon behavior in a new class called TimerTray.
 
 ```javascript
-const { Tray } = require("electron");
+const { app, Menu, Tray } = require("electron");
 
 class TimerTray extends Tray {
   constructor(iconPath, mainWindow) {
@@ -32,6 +32,7 @@ class TimerTray extends Tray {
 
     this.setToolTip("Tasky Timer");
     this.on("click", this.onClick);
+    this.on("right-click", this.onRightClick);
   }
 ```
 
@@ -47,10 +48,10 @@ The TimerTray class extends the Tray class from Electron. This means that it inh
 
 ---
 
-In the constructor of the TimerTray class, we pass in the path to the icon and the main window of the application. We store the main window in a property so we can use it in other methods of the class. We also set up an event listener for the click event on the tray icon.
+In the constructor of the TimerTray class, we pass in the path to the icon and the main window of the application. We store the main window in a property so we can use it in other methods of the class. We also set up an event listener for both a click or right-click event on the tray icon.
 
 ```javascript
-const { Tray } = require("electron");
+const { app, Menu, Tray } = require("electron");
 
 class TimerTray extends Tray {
   constructor(iconPath, mainWindow) {
@@ -60,6 +61,7 @@ class TimerTray extends Tray {
 
     this.setToolTip("Tasky Timer");
     this.on("click", this.onClick);
+    this.on("right-click", this.onRightClick);
   }
 ```
 
@@ -67,7 +69,7 @@ class TimerTray extends Tray {
 
 </SwmSnippet>
 
-<SwmSnippet path="/src/app/timer_tray.js" line="12">
+<SwmSnippet path="/src/app/timer_tray.js" line="13">
 
 ---
 
@@ -87,14 +89,13 @@ When the tray icon is clicked, we want to show or hide the main window. To do th
 
 </SwmSnippet>
 
-<SwmSnippet path="/src/app/timer_tray.js" line="19">
+<SwmSnippet path="/src/app/timer_tray.js" line="21">
 
 ---
 
-Then, we check if the main window is currently visible. If it is, we hide it. If it's not, we calculate the position where the main window should be shown and then show it.
+Then, we check if the main window is currently visible. If it is, we hide it. If it's not, we calculate the position where the main window should be shown and then show it. The user can also quit the application by right clicking on the tray icon and choosing the "Quit" option.
 
 ```javascript
-
     if (this.mainWindow.isVisible()) {
       this.mainWindow.hide();
     } else {
@@ -107,15 +108,27 @@ Then, we check if the main window is currently visible. If it is, we hide it. If
       });
       this.mainWindow.show();
     }
-  }
-}
+  };
+
+  onRightClick = () => {
+    const menuConfig = Menu.buildFromTemplate([
+      {
+        label: "Quit",
+        click: () => {
+          app.quit();
+        },
+      },
+    ]);
+  
+    this.popUpContextMenu(menuConfig);
+  };
 ```
 
 ---
 
 </SwmSnippet>
 
-<SwmSnippet path="/src/app/timer_tray.js" line="34">
+<SwmSnippet path="/src/app/timer_tray.js" line="49">
 
 ---
 
