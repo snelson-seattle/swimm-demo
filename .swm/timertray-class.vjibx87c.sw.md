@@ -152,7 +152,8 @@ module.exports = TimerTray;
 In our main application file, we import the TimerTray class.
 
 ```javascript
-const { app, BrowserWindow } = require("electron");
+const { app } = require("electron");
+const MainWindow = require("./app/main_window");
 const TimerTray = require("./app/timer_tray");
 ```
 
