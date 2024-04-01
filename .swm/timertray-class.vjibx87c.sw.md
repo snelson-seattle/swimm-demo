@@ -48,7 +48,7 @@ The TimerTray class extends the Tray class from Electron. This means that it inh
 
 ---
 
-In the constructor of the TimerTray class, we pass in the path to the icon and the main window of the application. We store the main window in a property so we can use it in other methods of the class. We also set up an event listener for the click event on the tray icon.
+In the constructor of the TimerTray class, we pass in the path to the icon and the main window of the application. We store the main window in a property so we can use it in other methods of the class. We also set up an event listener for both a click or right-click event on the tray icon.
 
 ```javascript
 const { app, Menu, Tray } = require("electron");
@@ -93,7 +93,7 @@ When the tray icon is clicked, we want to show or hide the main window. To do th
 
 ---
 
-Then, we check if the main window is currently visible. If it is, we hide it. If it's not, we calculate the position where the main window should be shown and then show it.
+Then, we check if the main window is currently visible. If it is, we hide it. If it's not, we calculate the position where the main window should be shown and then show it. The user can also quit the application by right clicking on the tray icon and choosing the "Quit" option.
 
 ```javascript
     if (this.mainWindow.isVisible()) {
