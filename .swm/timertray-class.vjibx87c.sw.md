@@ -152,25 +152,9 @@ module.exports = TimerTray;
 In our main application file, we import the TimerTray class.
 
 ```javascript
-const { app, BrowserWindow } = require("electron");
+const { app } = require("electron");
+const MainWindow = require("./app/main_window");
 const TimerTray = require("./app/timer_tray");
-```
-
----
-
-</SwmSnippet>
-
-<SwmSnippet path="/src/main.js" line="39">
-
----
-
-Then, when we create the tray icon, we create an instance of the TimerTray class instead of the Tray class. This way, we get all the custom behavior we defined in the TimerTray class.
-
-```javascript
-  tray = new TimerTray(iconPath, mainWindow);
-
-  tray.on("click", (event, bounds) => {
-   
 ```
 
 ---
